@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbox - <%= email %></title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --dark: #0a0a0a;
+            --darker: #000000;
+            --light: #f0f0f0;
+            --gray: #1a1a1a;
+            --light-gray: #2d2d2d;
+            --border: #333333;
+            --hover: #3a3a3a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--darker);
+            min-height: 100vh;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: var(--dark);
+            border-right: 1px solid var(--border);
+            padding: 30px 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo {
+            padding: 0 30px 30px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+        
+        .logo h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 12px;
+            color: var(--light);
+        }
+        
+        .nav-menu {
+            padding: 0 20px;
+            flex: 1;
+        }
+        
+        .nav-item {
+            margin-bottom: 8px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: #aaa;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: var(--light-gray);
+            color: var(--light);
+        }
+        
+        .nav-link i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .user-profile {
+            padding: 20px 30px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .user-details {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .user-email {
+            font-size: 0.9rem;
+            color: #888;
+        }
+        
+        .logout-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--light-gray);
+            color: var(--light);
+            border: none;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .logout-btn:hover {
+            background: #ff4d4d;
+        }
+        
+        .logout-btn i {
+            margin-right: 8px;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .topbar {
+            padding: 25px 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .page-title h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .search-container {
+            position: relative;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .search-container i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 12px 12px 45px;
+            background: var(--light-gray);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--light);
+        }
+        
+        .content-area {
+            flex: 1;
+            padding: 30px 40px;
+            overflow-y: auto;
+        }
+        
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: var(--light-gray);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .stat-info h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-info p {
+            color: #aaa;
+            margin: 0;
+        }
+        
+        .inbox-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .inbox-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .action-btn {
+            padding: 10px 20px;
+            background: var(--light-gray);
+            color: var(--light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .action-btn:hover {
+            background: var(--hover);
+        }
+        
+        .action-btn i {
+            margin-right: 8px;
+        }
+        
+        .messages-container {
+            background: var(--light-gray);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .message-item {
+            padding: 25px;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .message-item:last-child {
+            border-bottom: none;
+        }
+        
+        .message-item:hover {
+            background: var(--hover);
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .sender {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .time {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .subject {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .preview {
+            color: #aaa;
+            font-size: 1rem;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #777;
+        }
+        
+        .empty-state i {
+            font-size: 5rem;
+            margin-bottom: 25px;
+            color: var(--border);
+        }
+        
+        .empty-state h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .logo h2 span, .nav-link span, .user-details, .user-name, .user-email {
+                display: none;
+            }
+            
+            .logo, .nav-link, .user-profile {
+                text-align: center;
+                padding: 15px;
+            }
+            
+            .logo h2, .nav-link {
+                justify-content: center;
+            }
+            
+            .logo i, .nav-link i {
+                margin-right: 0;
+                font-size: 1.5rem;
+            }
+            
+            .avatar {
+                margin-right: 0;
+                margin: 0 auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            
+            .search-container {
+                max-width: 100%;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2><i class="bi bi-envelope"></i> <span>MailDash</span></h2>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <i class="bi bi-inbox"></i>
+                        <span>Inbox</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-send"></i>
+                        <span>Sent</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-star"></i>
+                        <span>Starred</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-calendar"></i>
+                        <span>Scheduled</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-trash"></i>
+                        <span>Trash</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-gear"></i>
+                        <span>Settings</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="user-profile">
+                <div class="user-info">
+                    <div class="avatar">
+                        <i class="bi bi-person"></i>
+                    </div>
+                    <div class="user-details">
+                        <div class="user-name"><%= email.split('@')[0] %></div>
+                        <div class="user-email"><%= email %></div>
+                    </div>
+                </div>
+                <a href="/logout" class="logout-btn">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="topbar">
+                <div class="page-title">
+                    <h1>Inbox</h1>
+                </div>
+                
+                <div class="search-container">
+                    <i class="bi bi-search"></i>
+                    <input type="text" class="search-input" placeholder="Search emails...">
+                </div>
+            </div>
+            
+            <div class="content-area">
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3><%= messages.length %></h3>
+                            <p>Total Messages</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="bi bi-envelope-open"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3><%= messages.length %></h3>
+                            <p>Unread</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="bi bi-star"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>12</h3>
+                            <p>Starred</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="inbox-header">
+                    <div class="inbox-title">Your Messages</div>
+                    <div class="actions">
+                        <div class="action-btn">
+                            <i class="bi bi-archive"></i> Archive
+                        </div>
+                        <div class="action-btn">
+                            <i class="bi bi-trash"></i> Delete
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="messages-container">
+                    <% if (messages && messages.length > 0) { %>
+                        <% messages.forEach(function(msg) { %>
+                            <div class="message-item">
+                                <div class="message-header">
+                                    <div class="sender"><%= msg.from %></div>
+                                    <div class="time">Just now</div>
+                                </div>
+                                <div class="subject"><%= msg.subject %></div>
+                                <div class="preview">This is a preview of the email content. The actual message would appear here with more details about the content...</div>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <i class="bi bi-envelope-open"></i>
+                            <h3>No Messages Found</h3>
+                            <p>Your inbox is empty or there was an error fetching messages.</p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
