@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Platforms - Admin Panel</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --dark: #0a0a0a;
+            --darker: #000000;
+            --light: #f0f0f0;
+            --gray: #1a1a1a;
+            --light-gray: #2d2d2d;
+            --border: #333333;
+            --hover: #3a3a3a;
+            --primary: #4a90e2;
+            --success: #50c878;
+            --danger: #ff6b6b;
+        }
+        
+        body {
+            background-color: var(--darker);
+            color: var(--light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .sidebar {
+            background: var(--dark);
+            border-right: 1px solid var(--border);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        
+        .sidebar .nav-link {
+            color: #aaa;
+            margin: 5px 15px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background: var(--light-gray);
+            color: var(--light);
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        
+        .main-content {
+            padding: 20px;
+        }
+        
+        .card {
+            background: var(--gray);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            background: var(--light-gray);
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+        }
+        
+        .table {
+            color: var(--light);
+        }
+        
+        .table th {
+            border-top: none;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .table td, .table th {
+            border-color: var(--border);
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border: none;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            border: none;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            border: none;
+        }
+        
+        .navbar {
+            background: var(--dark);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        
+        .search-bar {
+            max-width: 300px;
+        }
+        
+        .platform-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            background: var(--light-gray);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        .form-control, .form-select {
+            background: var(--light-gray);
+            border: 1px solid var(--border);
+            color: var(--light);
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background: var(--light-gray);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(74, 144, 226, 0.25);
+            color: var(--light);
+        }
+        
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-2 d-none d-lg-block sidebar">
+                <div class="text-center mb-4">
+                    <h3 class="mt-3"><i class="bi bi-envelope-heart"></i> MailAdmin</h3>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('list_mailboxes') }}">
+                            <i class="bi bi-envelope"></i> Mailboxes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('create') }}">
+                            <i class="bi bi-plus-circle"></i> Create Mailbox
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('categories') }}">
+                            <i class="bi bi-tags"></i> Categories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('email_platforms') }}">
+                            <i class="bi bi-grid-3x3-gap"></i> Email Platforms
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-gear"></i> Settings
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-lg-10 col-12 main-content">
+                <!-- Top Navbar for Mobile -->
+                <nav class="navbar navbar-expand-lg d-lg-none">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="#"><i class="bi bi-envelope-heart"></i> MailAdmin</a>
+                        <div class="user-info">
+                            <div class="dropdown">
+                                <a class="dropdown-toggle text-decoration-none text-light" href="#" role="button" data-bs-toggle="dropdown">
+                                    <div class="user-avatar">
+                                        <i class="bi bi-person"></i>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ url_for('dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('list_mailboxes') }}"><i class="bi bi-envelope"></i> Mailboxes</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('create') }}"><i class="bi bi-plus-circle"></i> Create Mailbox</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('categories') }}"><i class="bi bi-tags"></i> Categories</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('email_platforms') }}"><i class="bi bi-grid-3x3-gap"></i> Email Platforms</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+                
+                <!-- Desktop Top Bar -->
+                <div class="d-none d-lg-flex justify-content-between align-items-center mb-4">
+                    <h1>Email Platforms</h1>
+                    <div class="d-flex align-items-center">
+                        <div class="search-bar me-3">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                <input type="text" class="form-control" id="searchInput" placeholder="Search emails or platforms...">
+                            </div>
+                        </div>
+                        <div class="user-info">
+                            <div class="dropdown">
+                                <a class="dropdown-toggle text-decoration-none text-light" href="#" role="button" data-bs-toggle="dropdown">
+                                    <div class="user-avatar">
+                                        <i class="bi bi-person"></i>
+                                    </div>
+                                    <span class="ms-2">{{ session.admin_username }}</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ url_for('dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('list_mailboxes') }}"><i class="bi bi-envelope"></i> Mailboxes</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('create') }}"><i class="bi bi-plus-circle"></i> Create Mailbox</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('categories') }}"><i class="bi bi-tags"></i> Categories</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('email_platforms') }}"><i class="bi bi-grid-3x3-gap"></i> Email Platforms</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                          <i class="bi bi-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info{% endif %}-fill"></i>
+                          {{ message }}
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+                
+                <div class="row">
+                    <!-- Statistics Cards -->
+                    <div class="col-lg-12 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="bi bi-bar-chart"></i> Platform Statistics
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    {% for stat in platform_stats %}
+                                    <div class="col-md-3 col-sm-6">
+                                        <div class="stat-card">
+                                            <div class="stat-number">{{ stat.count }}</div>
+                                            <div class="stat-label">{{ stat.platform }}</div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    
+                                    {% if platform_stats|length == 0 %}
+                                    <div class="col-12 text-center">
+                                        <p class="text-muted">No email-platform mappings found. Add your first mapping below.</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Add New Mapping Form -->
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="bi bi-plus-circle"></i> Add New Mapping
+                            </div>
+                            <div class="card-body">
+                                <form id="mappingForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="emailInput" placeholder="user@example.com" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Platform</label>
+                                        <select class="form-select" id="platformSelect" required>
+                                            <option value="">Select a platform</option>
+                                            {% for platform in platforms %}
+                                            <option value="{{ platform.name }}">{{ platform.name }}</option>
+                                            {% endfor %}
+                                            <option value="other">Other (specify below)</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3" id="customPlatformDiv" style="display: none;">
+                                        <label class="form-label">Custom Platform</label>
+                                        <input type="text" class="form-control" id="customPlatformInput" placeholder="Enter platform name">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Notes (Optional)</label>
+                                        <textarea class="form-control" id="notesInput" rows="2" placeholder="Additional information about this email"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-success w-100">
+                                        <i class="bi bi-save"></i> Save Mapping
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Email-Platform Mappings List -->
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-list"></i> Email-Platform Mappings</span>
+                                <span class="badge bg-primary">{{ email_platforms|length }} Mappings</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="mappingsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Email</th>
+                                                <th>Platform</th>
+                                                <th>Notes</th>
+                                                <th>Last Updated</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for mapping in email_platforms %}
+                                            <tr>
+                                                <td>{{ mapping.email }}</td>
+                                                <td>
+                                                    <span class="platform-badge" data-platform="{{ mapping.platform }}">
+                                                        {{ mapping.platform }}
+                                                    </span>
+                                                </td>
+                                                <td>{{ mapping.notes or '-' }}</td>
+                                                <td>{{ mapping.updated_at[:10] }}</td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger" title="Delete" onclick="deleteMapping('{{ mapping.email }}')">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            
+                                            {% if email_platforms|length == 0 %}
+                                            <tr>
+                                                <td colspan="5" class="text-center">No email-platform mappings found. Add your first mapping using the form on the left.</td>
+                                            </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Show/hide custom platform input based on selection
+        document.getElementById('platformSelect').addEventListener('change', function() {
+            const customPlatformDiv = document.getElementById('customPlatformDiv');
+            if (this.value === 'other') {
+                customPlatformDiv.style.display = 'block';
+            } else {
+                customPlatformDiv.style.display = 'none';
+            }
+        });
+        
+        // Handle form submission
+        document.getElementById('mappingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('emailInput').value;
+            let platform = document.getElementById('platformSelect').value;
+            const notes = document.getElementById('notesInput').value;
+            
+            // If "other" is selected, use the custom platform name
+            if (platform === 'other') {
+                platform = document.getElementById('customPlatformInput').value;
+                if (!platform.trim()) {
+                    alert('Please enter a custom platform name');
+                    return;
+                }
+            }
+            
+            // Send data to API
+            fetch('/api/email-platform', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    platform: platform,
+                    notes: notes
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    alert(data.message);
+                    // Reload the page to show updated data
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while saving the mapping');
+            });
+        });
+        
+        // Delete mapping function
+        function deleteMapping(email) {
+            if (confirm(`Are you sure you want to delete the mapping for ${email}?`)) {
+                fetch(`/api/email-platform/${encodeURIComponent(email)}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while deleting the mapping');
+                });
+            }
+        }
+        
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const tableRows = document.querySelectorAll('#mappingsTable tbody tr:not(.text-center)');
+            
+            tableRows.forEach(row => {
+                const email = row.cells[0].textContent.toLowerCase();
+                const platform = row.cells[1].textContent.toLowerCase();
+                
+                if (email.includes(searchTerm) || platform.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        
+        // Color platform badges based on platform data
+        document.addEventListener('DOMContentLoaded', function() {
+            // Define platform colors (matching the database)
+            const platformColors = {
+                'Steam': '#00adee',
+                'Rockstar': '#fcaf17',
+                'Epic Games': '#3a3a3a',
+                'Ubisoft': '#f5f5f5',
+                'Microsoft': '#00bcf2',
+                'Google': '#4285f4',
+                'Apple': '#a2aaad',
+                'Amazon': '#ff9900',
+                'Netflix': '#e50914',
+                'Spotify': '#1db954',
+                'Business': '#4a90e2',
+                'Personal': '#50c878',
+                'Social Media': '#8a3ab9',
+                'Banking': '#009900',
+                'Other': '#6c757d'
+            };
+            
+            // Apply colors to platform badges
+            const platformBadges = document.querySelectorAll('.platform-badge');
+            platformBadges.forEach(badge => {
+                const platformName = badge.getAttribute('data-platform');
+                if (platformColors[platformName]) {
+                    badge.style.backgroundColor = platformColors[platformName];
+                } else {
+                    // Default color if platform not found
+                    badge.style.backgroundColor = '#4a90e2';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
