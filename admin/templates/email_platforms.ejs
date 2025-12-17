@@ -184,27 +184,27 @@
                 </div>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('dashboard') }}">
+                        <a class="nav-link" href="/">
                             <i class="bi bi-speedometer2"></i> Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('list_mailboxes') }}">
+                        <a class="nav-link" href="/mailboxes">
                             <i class="bi bi-envelope"></i> Mailboxes
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('create') }}">
+                        <a class="nav-link" href="/create">
                             <i class="bi bi-plus-circle"></i> Create Mailbox
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('categories') }}">
+                        <a class="nav-link" href="/categories">
                             <i class="bi bi-tags"></i> Categories
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('email_platforms') }}">
+                        <a class="nav-link active" href="/email-platforms">
                             <i class="bi bi-grid-3x3-gap"></i> Email Platforms
                         </a>
                     </li>
@@ -230,13 +230,13 @@
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ url_for('dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('list_mailboxes') }}"><i class="bi bi-envelope"></i> Mailboxes</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('create') }}"><i class="bi bi-plus-circle"></i> Create Mailbox</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('categories') }}"><i class="bi bi-tags"></i> Categories</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('email_platforms') }}"><i class="bi bi-grid-3x3-gap"></i> Email Platforms</a></li>
+                                    <li><a class="dropdown-item" href="/"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="/mailboxes"><i class="bi bi-envelope"></i> Mailboxes</a></li>
+                                    <li><a class="dropdown-item" href="/create"><i class="bi bi-plus-circle"></i> Create Mailbox</a></li>
+                                    <li><a class="dropdown-item" href="/categories"><i class="bi bi-tags"></i> Categories</a></li>
+                                    <li><a class="dropdown-item" href="/email-platforms"><i class="bi bi-grid-3x3-gap"></i> Email Platforms</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                                    <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -262,13 +262,13 @@
                                     <span class="ms-2"><%= typeof session !== 'undefined' && session.admin_username ? session.admin_username : 'Admin' %></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ url_for('dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('list_mailboxes') }}"><i class="bi bi-envelope"></i> Mailboxes</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('create') }}"><i class="bi bi-plus-circle"></i> Create Mailbox</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('categories') }}"><i class="bi bi-tags"></i> Categories</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('email_platforms') }}"><i class="bi bi-grid-3x3-gap"></i> Email Platforms</a></li>
+                                    <li><a class="dropdown-item" href="/"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="/mailboxes"><i class="bi bi-envelope"></i> Mailboxes</a></li>
+                                    <li><a class="dropdown-item" href="/create"><i class="bi bi-plus-circle"></i> Create Mailbox</a></li>
+                                    <li><a class="dropdown-item" href="/categories"><i class="bi bi-tags"></i> Categories</a></li>
+                                    <li><a class="dropdown-item" href="/email-platforms"><i class="bi bi-grid-3x3-gap"></i> Email Platforms</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                                    <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
                                 </ul>
                             </div>
                         </div>
